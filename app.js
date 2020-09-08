@@ -79,6 +79,6 @@ app.use((err, req, res, next) => {
 })
 app.use('/admin/api', admin);
 app.use('/home/api', home);
-app.listen(3000,'0.0.0.0', () => {
+app.listen(3000,'112.124.203.100', () => {
   console.log('服务器启动成功'); 
 })
