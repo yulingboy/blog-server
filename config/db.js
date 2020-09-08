@@ -4,7 +4,7 @@ const connectionDB = async () => {
   try {
     mongoose.set('useCreateIndex', true)
     mongoose.set('useFindAndModify', false)
-    await mongoose.connect('mongodb://localhost/new_blog', {
+    await mongoose.connect('mongodb://127.0.0.1/blog', {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
