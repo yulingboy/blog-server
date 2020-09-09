@@ -64,19 +64,19 @@ app.use(expressJWT({ secret: secretKey, algorithms: ['HS256'] }).unless({
   ]
 }));
 // 使用全局错误处理中间件，捕获解析 JWT 失败后产生的错误
-app.use((err, req, res, next) => {
-  // 这次错误是由 token 解析失败导致的
-  if (err.name === 'UnauthorizedError') {
-    return res.send({
-      status: 401,
-      message: '无效的token',
-    })
-  }
-  res.send({
-    status: 500,
-    message: '未知的错误',
-  })
-})
+// app.use((err, req, res, next) => {
+//   // 这次错误是由 token 解析失败导致的
+//   if (err.name === 'UnauthorizedError') {
+//     return res.send({
+//       status: 401,
+//       message: '无效的token',
+//     })
+//   }
+//   res.send({
+//     status: 500,
+//     message: '未知的错误',
+//   })
+// })
 app.use('/admin/api', admin);
 app.use('/home/api', home);
 app.listen(3000,'0.0.0.0', () => {
