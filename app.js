@@ -37,7 +37,7 @@ app.use(expressJWT({ secret: secretKey, algorithms: ['HS256'] }).unless({
     '/admin/api/reg',
     '/home/api/articles',
     '/home/api/article',
-    '/'
+    '/index'
     // '/admin/api/userlist',
     // '/admin/api/classify',
     // '/admin/api/classifylist',
