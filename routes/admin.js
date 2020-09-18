@@ -4,6 +4,7 @@ const router = express.Router();
 // 将路由函数导入
 const userHandler=require('../router_handler/admin')
 
+router.get('/captcha', userHandler.captcha) // 获取验证码信息
 
 router.post('/reg', userHandler.reg) // 用户注册路由
 router.post('/login', userHandler.login) // 用户登录路由
@@ -36,6 +37,12 @@ router.get('/friendlylist', userHandler.friendlylist) // 添加友情链接
 router.get('/getfriendly', userHandler.getfriendly) // 获取需要修改的友情链接
 router.put('/updatefriendly', userHandler.updatefriendly) // 修改友情链接
 router.delete('/deletefriendly', userHandler.deletefriendly) // 删除链接信息
+
+router.post('/swiper', userHandler.swiper) // 添加轮播图
+router.get('/swiperlist', userHandler.swiperlist) // 添加轮播图
+router.get('/getswiper', userHandler.getswiper) // 获取需要修改的轮播图
+router.put('/updateswiper', userHandler.updateswiper) // 修改轮播图
+router.delete('/deleteswiper', userHandler.deleteswiper) // 删除轮播图信息
 
 
 // 将对进行导出

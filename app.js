@@ -1,5 +1,6 @@
 // 引入express模块
 const express = require('express');
+const session = require("express-session");
 // 导入cors
 const cors = require('cors');
 // 导入body-parser
@@ -7,6 +8,11 @@ const bodyPaser = require('body-parser');
 // 导入用户将客户端发送过来的JWT字符串，解析还原成JSON对象的包
 const expressJWT = require('express-jwt');
 // const jwt = require('jsonwebtoken');
+// const session = require('express-session');
+
+// const cookieSession = require("cookie-session");
+
+
 // 导入后台路由
 const admin = require('./routes/admin');
 const home = require('./routes/home');
@@ -19,13 +25,35 @@ const app = express();
 app.use(bodyPaser.json());
 // 处理post请求参数
 app.use(bodyPaser.urlencoded({ extended: false }));
+
+// const keys = [];
+// for(var i = 0; i < 10000; i++){
+// 	keys.push("sessionid"+Math.random());
+// }
+ 
+// app.use(cookieSession({
+// 	name:"sessionId",
+// 	keys,
+// 	maxAge:30*60*1000 //ms
+// }))
+
+app.use(session({
+  secret: '12345',
+  cookie: {maxAge: 1000*60*60*24},
+  resave:false, 
+  saveUninitialized: true,
+}))
+
 //设置跨域请求
 // app.all('*', function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", origin);
+//   let originHeader=req.headers.origin;
+//   // res.header("Access-Control-Allow-Origin", origin);
+//   res.header("Access-Control-Allow-Origin", originHeader);
 //   res.header('Access-Control-Allow-Headers', 'Content-Type, Content-Length, Authorization, Accept, X-Requested-With , yourHeaderFeild');
 //   res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
 //   res.header("X-Powered-By", ' 3.2.1')
 //   res.header("Content-Type", "application/json;charset=utf-8");
+//   res.header("Access-Control-Allow-Credentials", true);
 //   next();
 // });
 
@@ -46,8 +74,8 @@ app.use(expressJWT({ secret: secretKey, algorithms: ['HS256'] }).unless({
     '/home/api/messagelist',
     '/home/api/friendlylist',
     '/home/api/friendly',
-    // '/admin/api/userlist',
-    // '/admin/api/classify',
+    '/home/api/swiperlist',
+    '/admin/api/captcha',
     // '/admin/api/classifylist',
     // '/admin/api/article',
     // '/admin/api/articlelist',
@@ -88,6 +116,9 @@ app.use((err, req, res, next) => {
 })
 app.use('/admin/api', admin);
 app.use('/home/api', home);
-app.listen(3000,'0.0.0.0', () => {
+// app.listen(3000,'0.0.0.0', () => {
+//   console.log('服务器启动成功'); 
+// })
+app.listen(3000,'127.0.0.1', () => {
   console.log('服务器启动成功'); 
 })

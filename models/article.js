@@ -18,7 +18,7 @@ const articleSchema = new mongoose.Schema({
   },
   cover: {
     type: String,
-    default: `http://images.bianxiaofeng.com/ced846eab08578468670a87333e05b5f.jpg`
+    default: "http://images.bianxiaofeng.com/ced846eab08578468670a87333e05b5f.jpg"
   },
   content: {
     type: String

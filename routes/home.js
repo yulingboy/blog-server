@@ -20,5 +20,7 @@ router.get('/messagelist', homeHandler.messagelist) // 获取分类文章
 router.post('/friendly', homeHandler.friendly) // 获取分类
 router.get('/friendlylist', homeHandler.friendlylist) // 获取分类文章
 
+router.get('/swiperlist', homeHandler.swiperlist) // 获取轮播图
+
 // 将对进行导出
 module.exports = router;

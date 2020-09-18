@@ -10,6 +10,7 @@ const Comment = require("../models/comment");
 const Friendly = require("../models/friendly");
 // 导入留言集合
 const Message = require("../models/message");
+const Swiper = require("../models/swiper");
 // 导入用于生成JWT字符串的包
 const jwt = require('jsonwebtoken');
 
@@ -259,5 +260,18 @@ exports.friendlylist = async (req, res) => {
   // console.log(fr);
   res.send({
     friendly: friendly
+  });
+}
+
+//查询轮播图列表
+exports.swiperlist = async (req, res) => {
+  // console.log(req.query);
+  // const counts = await Comment.countDocuments({aid: req.query.aid});
+  // await Article.findOneAndUpdate({_id:req.query.aid}, {$set: {comments: counts}}, {new: true})
+  const swiper = await Swiper.find({}).sort({time: -1})
+  // let comments = await Comment.find({aid: req.query.aid});
+  // console.log(fr);
+  res.send({
+    swiper: swiper
   });
 }
