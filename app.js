@@ -63,6 +63,7 @@ app.use(expressJWT({ secret: secretKey, algorithms: ['HS256'] }).unless({
   path: [
     '/admin/api/login',
     '/admin/api/reg',
+    '/admin/api/captcha',
     '/home/api/articles',
     '/home/api/article',
     '/home/api/classifylist',
@@ -75,7 +76,9 @@ app.use(expressJWT({ secret: secretKey, algorithms: ['HS256'] }).unless({
     '/home/api/friendlylist',
     '/home/api/friendly',
     '/home/api/swiperlist',
-    '/admin/api/captcha',
+    '/home/api/beautiful',
+    '/home/api/imglist',
+    '/home/api/img',
     // '/admin/api/classifylist',
     // '/admin/api/article',
     // '/admin/api/articlelist',

@@ -11,6 +11,8 @@ const Friendly = require("../models/friendly");
 // 导入留言集合
 const Message = require("../models/message");
 const Swiper = require("../models/swiper");
+const Beautiful = require("../models/beautifulline");
+const Img = require("../models/imgbed")
 // 导入用于生成JWT字符串的包
 const jwt = require('jsonwebtoken');
 
@@ -265,13 +267,65 @@ exports.friendlylist = async (req, res) => {
 
 //查询轮播图列表
 exports.swiperlist = async (req, res) => {
-  // console.log(req.query);
-  // const counts = await Comment.countDocuments({aid: req.query.aid});
-  // await Article.findOneAndUpdate({_id:req.query.aid}, {$set: {comments: counts}}, {new: true})
   const swiper = await Swiper.find({}).sort({time: -1})
-  // let comments = await Comment.find({aid: req.query.aid});
-  // console.log(fr);
   res.send({
     swiper: swiper
   });
+}
+
+//获取每日一句
+exports.beautiful = async (req, res) => {
+  const beautifulList = await Beautiful.find({})
+  // console.log(beautifulList.length);
+  const beautiful = beautifulList[Math.floor(Math.random()*(beautifulList.length))]
+  // console.log(beautiful)
+  if(!beautiful){
+    return res.send({
+      status: 400,
+      message:'获取每日一句失败！'
+    })
+  } else {
+    res.send({
+      status: 200,
+      message: '获取每日一句成功',
+      beautiful: beautiful
+    })
+  }
+}
+//获取随机图片
+exports.img = async (req, res) => {
+  const imglist = await Img.find({})
+  // console.log(beautifulList.length);
+  const img = imglist[Math.floor(Math.random()*(imglist.length))]
+  // console.log(beautiful)
+  if(!img){
+    return res.send({
+      status: 400,
+      message:'获取失败！'
+    })
+  } else {
+    res.send({
+      status: 200,
+      message: '获取成功',
+      img: img
+    })
+  }
+}
+
+//查询图片列表
+exports.imglist = async (req, res) => {
+  const img = await Img.find({}).sort({time: -1})
+  // console.log(img)
+  if(!img){
+    return res.send({
+      status: 400,
+      message:'获取图片列表失败！'
+    })
+  } else {
+    res.send({
+      status: 200,
+      message: '获取图片列表成功',
+      img: img
+    })
+  }
 }

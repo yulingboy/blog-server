@@ -9,11 +9,13 @@ const Comment = require("../models/comment");
 //导入友情链接集合
 const Friendly = require("../models/friendly");
 const Swiper = require("../models/swiper");
+const Beautiful = require("../models/beautifulline");
 // 引入bcrypt模块
 const bcrypt = require("bcrypt");
 // 导入用于生成JWT字符串的包
 const jwt = require("jsonwebtoken");
 const svgCaptcha = require("svg-captcha");
+const Imgbed = require("../models/imgbed");
 
 // const express = require("express");
 
@@ -30,18 +32,18 @@ exports.captcha = (req, res) => {
  });
  req.session.captcha = captcha.text.toLocaleLowerCase();
  // req.session.setItem(captcha,'captcha.text.toLocaleLowerCase()')
-//  console.log(req.session);
-  // res.setHeader("Content-Type","image/svg+xml; charset=UTF-8");
-  // res.setHeader("Access-Control-Max-Age", "3600");
-  // res.setHeader("content-length", captcha.data.length );
-//  res.setHeaders{"Content-Type": "image/svg+xml; charset=UTF-8"};
+ //  console.log(req.session);
+ // res.setHeader("Content-Type","image/svg+xml; charset=UTF-8");
+ // res.setHeader("Access-Control-Max-Age", "3600");
+ // res.setHeader("content-length", captcha.data.length );
+ //  res.setHeaders{"Content-Type": "image/svg+xml; charset=UTF-8"};
  res.type("svg");
-//  res.type('html');
-//  res.status(200).send(captcha.data);
+ //  res.type('html');
+ //  res.status(200).send(captcha.data);
  res.send({
-   data: captcha.data,
-   text: captcha.text.toLocaleLowerCase()
- })
+  data: captcha.data,
+  text: captcha.text.toLocaleLowerCase(),
+ });
 };
 
 // 用户注册
@@ -80,10 +82,10 @@ exports.reg = async (req, res) => {
 // 用户登录
 exports.login = async (req, res) => {
  // 将用户信息结构出来
- const { username, password, email, captcha } = req.body;
-//  console.log(req.session)
-//  console.log(captcha + '+++' + req.session.captcha);
-//  console.log(req.session.captcha);
+ const { username, password, email } = req.body;
+ //  console.log(req.session)
+ //  console.log(captcha + '+++' + req.session.captcha);
+ //  console.log(req.session.captcha);
  // 根据用户邮箱查询是否存在
  const user = await User.findOne({ email: email });
  // 比对密码是否正确
@@ -639,7 +641,7 @@ exports.swiper = async (req, res) => {
   });
  }
 };
-//获取友情链接列表
+//获取轮播图列表
 exports.swiperlist = async (req, res) => {
  const swiper = await Swiper.find({});
  if (!swiper) {
@@ -655,7 +657,7 @@ exports.swiperlist = async (req, res) => {
   });
  }
 };
-//获取需要修改的友情链接
+//获取需要修改的轮播图
 exports.getswiper = async (req, res) => {
  console.log(req);
  const swiper = await Swiper.findOne({ _id: req.query.id });
@@ -672,7 +674,7 @@ exports.getswiper = async (req, res) => {
   });
  }
 };
-// 修改友情链接
+// 修改轮播图信息
 exports.updateswiper = async (req, res) => {
  const swiper = await Swiper.findOneAndUpdate(
   { _id: req.body._id },
@@ -698,7 +700,7 @@ exports.updateswiper = async (req, res) => {
   });
  }
 };
-// 删除文章分类
+// 删除轮播图
 exports.deleteswiper = async (req, res) => {
  const flag = await Swiper.findOneAndDelete({ _id: req.query.id });
  if (!flag) {
@@ -713,3 +715,174 @@ exports.deleteswiper = async (req, res) => {
   });
  }
 };
+
+//添加每日一句
+exports.beautiful = async (req, res) => {
+ // console.log(req.body);
+ // const { img, url, description } = req.body;
+ const beautiful = await Beautiful.create({ title: req.body.title });
+ // res.send(friendly)
+ if (!beautiful) {
+  return res.send({
+   status: 400,
+   message: "添加每日一句失败！",
+  });
+ } else {
+  res.send({
+   status: 200,
+   message: "添加每日一句成功！",
+   beautiful: beautiful,
+  });
+ }
+};
+//获取每日一句列表
+exports.beautifullist = async (req, res) => {
+ const beautiful = await Beautiful.find({});
+ if (!beautiful) {
+  return res.send({
+   status: 400,
+   message: "获取链接列表失败！",
+  });
+ } else {
+  res.send({
+   status: 200,
+   message: "获取链接列表成功！",
+   beautiful: beautiful,
+  });
+ }
+};
+// 删除每日一句
+exports.deletebeautiful = async (req, res) => {
+//  console.log(req);
+ const flag = await Beautiful.findOneAndDelete({ _id: req.query.id });
+ if (!flag) {
+  return res.send({
+   status: 400,
+   message: "删除失败",
+  });
+ } else {
+  res.send({
+   status: 200,
+   message: "删除成功",
+  });
+ }
+};
+//获取需要修改的轮播图
+exports.getbeautiful = async (req, res) => {
+  console.log(req);
+  const beautiful = await Beautiful.findOne({ _id: req.query.id });
+  if (!beautiful) {
+   return res.send({
+    status: 400,
+    message: "获取每日一句失败！",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "获取每日一句成功！",
+    beautiful: beautiful,
+   });
+  }
+};
+// 修改轮播图信息
+exports.updatebeautiful = async (req, res) => {
+  const beautiful = await Beautiful.findOneAndUpdate({ _id: req.body._id }, { $set: { title: req.body.title }}, { new: true });
+  if (!beautiful) {
+   return res.send({
+    status: 400,
+    message: "更新信息失败！",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "更新信息成功！",
+    beautiful: beautiful,
+   });
+  }
+};
+
+//添加图片
+exports.img = async (req, res) => {
+  // console.log(req.body);
+  const { img, title, description } = req.body;
+  const content = await Imgbed.create({ title: title, img: img, description: description });
+  // res.send(friendly)
+  if (!content) {
+   return res.send({
+    status: 400,
+    message: "添加失败！",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "添加成功！",
+    content: content,
+   });
+  }
+ };
+ //获取图片列表
+ exports.imglist = async (req, res) => {
+  const img = await Imgbed.find({}).sort({time: -1});
+  if (!img) {
+   return res.send({
+    status: 400,
+    message: "获取列表失败！",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "获取列表成功！",
+    img: img,
+   });
+  }
+ };
+ // 删除每日一句
+ exports.deleteimg = async (req, res) => {
+ //  console.log(req);
+  const flag = await Imgbed.findOneAndDelete({ _id: req.query.id });
+  if (!flag) {
+   return res.send({
+    status: 400,
+    message: "删除失败",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "删除成功",
+   });
+  }
+ };
+ //获取需要修改的轮播图
+ exports.getimg = async (req, res) => {
+  //  console.log(req);
+   const img = await Imgbed.findOne({ _id: req.query.id });
+   if (!img) {
+    return res.send({
+     status: 400,
+     message: "获取每日一句失败！",
+    });
+   } else {
+    res.send({
+     status: 200,
+     message: "获取每日一句成功！",
+     img: img,
+    });
+   }
+ };
+ // 修改轮播图信息
+ exports.updateimg = async (req, res) => {
+  //  console.log(res)
+   const img = await Imgbed.findOneAndUpdate({ _id: req.body._id }, { $set: { title: req.body.title, img: req.body.img, description: req.body.description }}, { new: true });
+   if (!img) {
+    return res.send({
+     status: 400,
+     message: "更新信息失败！",
+    });
+   } else {
+    res.send({
+     status: 200,
+     message: "更新信息成功！",
+     img: img,
+    });
+   }
+ };

@@ -44,6 +44,18 @@ router.get('/getswiper', userHandler.getswiper) // 获取需要修改的轮播�
 router.put('/updateswiper', userHandler.updateswiper) // 修改轮播图
 router.delete('/deleteswiper', userHandler.deleteswiper) // 删除轮播图信息
 
+router.post('/beautiful', userHandler.beautiful) //添加每日一句
+router.get('/beautifullist', userHandler.beautifullist) //获取每日一句列表
+router.delete('/deletebeautiful', userHandler.deletebeautiful) //删除每日一句
+router.get('/getbeautiful', userHandler.getbeautiful) // 获取需要修改的每日一句
+router.put('/updatebeautiful', userHandler.updatebeautiful) // 修改轮播图
+
+router.post('/img', userHandler.img) //添加图片
+router.get('/imglist', userHandler.imglist) //获取图片列表
+router.delete('/deleteimg', userHandler.deleteimg) //删除图片
+router.get('/getimg', userHandler.getimg) // 获取需要修改的图片
+router.put('/updateimg', userHandler.updateimg) // 修改图片
+
 
 // 将对进行导出
 module.exports = router;
