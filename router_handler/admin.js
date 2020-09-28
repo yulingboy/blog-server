@@ -16,6 +16,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const svgCaptcha = require("svg-captcha");
 const Imgbed = require("../models/imgbed");
+const Userinfo = require("../models/userinfo");
 
 // const express = require("express");
 
@@ -767,9 +768,9 @@ exports.deletebeautiful = async (req, res) => {
   });
  }
 };
-//获取需要修改的轮播图
+//获取需要修改的每日一句
 exports.getbeautiful = async (req, res) => {
-  console.log(req);
+  // console.log(req);
   const beautiful = await Beautiful.findOne({ _id: req.query.id });
   if (!beautiful) {
    return res.send({
@@ -784,7 +785,7 @@ exports.getbeautiful = async (req, res) => {
    });
   }
 };
-// 修改轮播图信息
+// 修改每日一句
 exports.updatebeautiful = async (req, res) => {
   const beautiful = await Beautiful.findOneAndUpdate({ _id: req.body._id }, { $set: { title: req.body.title }}, { new: true });
   if (!beautiful) {
@@ -836,7 +837,7 @@ exports.img = async (req, res) => {
    });
   }
  };
- // 删除每日一句
+ // 删除图片
  exports.deleteimg = async (req, res) => {
  //  console.log(req);
   const flag = await Imgbed.findOneAndDelete({ _id: req.query.id });
@@ -852,7 +853,7 @@ exports.img = async (req, res) => {
    });
   }
  };
- //获取需要修改的轮播图
+ //获取需要修改的图片
  exports.getimg = async (req, res) => {
   //  console.log(req);
    const img = await Imgbed.findOne({ _id: req.query.id });
@@ -869,7 +870,7 @@ exports.img = async (req, res) => {
     });
    }
  };
- // 修改轮播图信息
+ // 修改图片
  exports.updateimg = async (req, res) => {
   //  console.log(res)
    const img = await Imgbed.findOneAndUpdate({ _id: req.body._id }, { $set: { title: req.body.title, img: req.body.img, description: req.body.description }}, { new: true });
@@ -883,6 +884,90 @@ exports.img = async (req, res) => {
      status: 200,
      message: "更新信息成功！",
      img: img,
+    });
+   }
+ };
+
+ //添加个人信息
+exports.userinfo = async (req, res) => {
+  const {title, img, description } = req.body;
+  const userinfo = await Userinfo.create({ title: title, img: img, description: description });
+  if (!userinfo) {
+   return res.send({
+    status: 400,
+    message: "添加失败！",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "添加成功！",
+    userinfo: userinfo,
+   });
+  }
+ };
+ //获取个人信息列表
+ exports.userinfolist = async (req, res) => {
+  const userinfo = await Userinfo.find({});
+  if (!userinfo) {
+   return res.send({
+    status: 400,
+    message: "获取列表失败！",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "获取列表成功！",
+    userinfo: userinfo,
+   });
+  }
+ };
+ // 删除个人信息
+ exports.deleteuserinfo = async (req, res) => {
+  // console.log(req);
+  const flag = await Userinfo.findOneAndDelete({ _id: req.query.id });
+  if (!flag) {
+   return res.send({
+    status: 400,
+    message: "删除失败",
+   });
+  } else {
+   res.send({
+    status: 200,
+    message: "删除成功",
+   });
+  }
+ };
+ //获取需要修改的个人信息
+ exports.getuserinfo = async (req, res) => {
+  //  console.log(req);
+   const userinfo = await Userinfo.findOne({ _id: req.query.id });
+   if (!userinfo) {
+    return res.send({
+     status: 400,
+     message: "获取失败！",
+    });
+   } else {
+    res.send({
+     status: 200,
+     message: "获取成功！",
+     userinfo: userinfo,
+    });
+   }
+ };
+ // 修改个人信息
+ exports.updateuserinfo = async (req, res) => {
+   const { title, img, description } = req.body
+   const userinfo = await Userinfo.findOneAndUpdate({ _id: req.body._id }, { $set: { title: title, img: img, description: description }}, { new: true });
+   if (!userinfo) {
+    return res.send({
+     status: 400,
+     message: "更新信息失败！",
+    });
+   } else {
+    res.send({
+     status: 200,
+     message: "更新信息成功！",
+     userinfo: userinfo,
     });
    }
  };

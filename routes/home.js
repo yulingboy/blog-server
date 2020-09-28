@@ -27,5 +27,7 @@ router.get('/beautiful',homeHandler.beautiful) //获取每日一句
 router.get('/imglist', homeHandler.imglist) // 获取图片列表
 router.get('/img', homeHandler.img) // 获取随机图片 
 
+router.get('/userinfo', homeHandler.userinfo) // 获取随机图片
+
 // 将对进行导出
 module.exports = router;

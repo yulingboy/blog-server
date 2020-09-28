@@ -13,6 +13,7 @@ const Message = require("../models/message");
 const Swiper = require("../models/swiper");
 const Beautiful = require("../models/beautifulline");
 const Img = require("../models/imgbed")
+const Userinfo = require("../models/userinfo")
 // 导入用于生成JWT字符串的包
 const jwt = require('jsonwebtoken');
 
@@ -326,6 +327,24 @@ exports.imglist = async (req, res) => {
       status: 200,
       message: '获取图片列表成功',
       img: img
+    })
+  }
+}
+
+//查询个人信息
+exports.userinfo = async (req, res) => {
+  const userinfo = await Userinfo.find({}).sort({time: -1})
+  // console.log(img)
+  if(!userinfo){
+    return res.send({
+      status: 400,
+      message:'获取图片列表失败！'
+    })
+  } else {
+    res.send({
+      status: 200,
+      message: '获取图片列表成功',
+      userinfo: userinfo
     })
   }
 }

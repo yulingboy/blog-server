@@ -56,6 +56,18 @@ router.delete('/deleteimg', userHandler.deleteimg) //删除图片
 router.get('/getimg', userHandler.getimg) // 获取需要修改的图片
 router.put('/updateimg', userHandler.updateimg) // 修改图片
 
+router.post('/userinfo', userHandler.userinfo) //添加每日一句
+router.get('/userinfolist', userHandler.userinfolist) //获取每日一句列表
+router.delete('/deleteuserinfo', userHandler.deleteuserinfo) //删除每日一句
+router.get('/getuserinfo', userHandler.getuserinfo) // 获取需要修改的每日一句
+router.put('/updateuserinfo', userHandler.updateuserinfo) // 修改轮播图
+
+// router.post('/userinfo', userHandler.userinfo) //添加图片
+// router.get('/userinfolist', userHandler.userinfolist) //获取图片列表
+// router.delete('/deleteuserinfo', userHandler.deleteuserinfo) //删除图片
+// router.get('/getuserinfo', userHandler.getuserinfo) // 获取需要修改的图片
+// router.put('/updateuserinfo', userHandler.updateuserinfo) // 修改图片
+
 
 // 将对进行导出
 module.exports = router;
