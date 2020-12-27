@@ -31,6 +31,10 @@ const commentSchema = new mongoose.Schema({
   //评论内容
   content: {
     type:String
+  },
+  status: {
+    type: Number,
+    default: 0 //0为未审核 1为审核通过 2为审核未通过
   }
 })
 // 根据规则创建集合

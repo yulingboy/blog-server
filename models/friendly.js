@@ -13,7 +13,12 @@ const friendlySchema = new mongoose.Schema({
         default: Date.now
     },
     description: {
-        type: String
+        type: String,
+        default: "该网站还没有描述哦"
+    },
+    status: {
+        type: Number,
+        default: 0 // 0:未审核 1：审核通过 2：审核未通过
     }
 })
 
