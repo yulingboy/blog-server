@@ -6,20 +6,26 @@ exports.new = async (req, res) => {
     const sentence = await Beautiful.create(req.body);
     if (!sentence) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
         data: sentence,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -37,24 +43,31 @@ exports.list = async (req, res) => {
     //页码对应的数据查询开始位置
     let start = (pageNum - 1) * pageSize;
     // 从数据库中查询用户
-    let sentence = await Beautiful.find({}).sort({time: -1}).limit(pageSize).skip(start); 
+    let sentence = await Beautiful.find({})
+      .sort({ time: -1 })
+      .limit(pageSize)
+      .skip(start);
     res.send({
-      meta:{
+      meta: {
         status: 200,
-        message: "success"
+        message: "success",
       },
-      data:{
-        sentence:sentence, //用户数据
-        pageNum: pageNum,  // 当前页
-        total: total, // 数据总数
-        pageSize: pageSize, // 每页条数
-        pageCount: pageCount, // 页数
-      }
+      data: {
+        sentence: sentence, //用户数据
+        pagition: {
+          pageNum: pageNum, // 当前页
+          total: total, // 数据总数
+          pageSize: pageSize, // 每页条数
+          pageCount: pageCount, // 页数
+        },
+      },
     });
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -64,19 +77,25 @@ exports.delete = async (req, res) => {
     const sentence = await Beautiful.findOneAndDelete({ _id: req.params.id });
     if (!sentence) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -86,20 +105,26 @@ exports.info = async (req, res) => {
     const sentence = await Beautiful.findOne({ _id: req.params.id });
     if (!sentence) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
         data: sentence,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -113,43 +138,59 @@ exports.edit = async (req, res) => {
     );
     if (!sentence) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
         data: sentence,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
 // 审核友情链接
 exports.check = async (req, res) => {
   try {
-    const centence = await Beautiful.findOneAndUpdate({ _id: req.params.id },{ $set: req.body },{ new: true });
+    const centence = await Beautiful.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
     if (!centence) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
-        data: centence
+        meta: {
+          status: 200,
+          message: "success",
+        },
+        data: centence,
       });
     }
   } catch (error) {
-      return res.send({
-          status: 500,
-          message: error
-      })
+    return res.send({
+      meta: {
+        status: 500,
+        message: error,
+      },
+    });
   }
 };

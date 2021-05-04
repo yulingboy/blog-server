@@ -101,17 +101,26 @@ exports.login = async (req, res) => {
 
   // 根据用户邮箱查询是否存在
   const user = await User.findOne({ email: email });
+  if(!user){
+    return res.send({
+      meta: {
+        status: 400,
+        message: "用户不存在！",
+      }
+    });
+  }
   // 比对密码是否正确
   const isVaild = await bcrypt.compare(req.body.password, user.password);
   if (!isVaild) {
     //密码错误
     return res.send({
-      status: 400,
-      message: "密码错误",
+      meta: {
+        status: 400,
+        message: "密码错误",
+      }
     });
   } else {
     //密码正确
-
     // 在登录成功之后，调用 jwt.sign() 方法生成 JWT 字符串。并通过 token 属性发送给客户端
     const tokenStr =
       "Bearer " +

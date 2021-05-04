@@ -1,5 +1,5 @@
 const Classify = require('../../models/classify');
-// 添加文章标签
+// 添加分类标签
 exports.classify = async (req, res) => {
     const { classify } = req.body;
     const classes = await Classify.findOne({ classify: classify });
@@ -16,23 +16,27 @@ exports.classify = async (req, res) => {
      });
     }
    };
-   //查询文章标签
+   //查询分类标签
    exports.classifylist = async (req, res) => {
     const classifylist = await Classify.find({});
     if (classifylist.length <= 0) {
      return res.send({
-      status: 400,
-      message: "获取文章分类失败",
+      meta: {
+        status: 400,
+        message: "获取分类分类失败",
+      }
      });
     } else {
      res.send({
-      status: 200,
-      message: "获取文章分类成功",
-      classifylist: classifylist,
+      meta: {
+        status: 200,
+        message: "获取分类分类成功",
+      },
+      data: classifylist,
      });
     }
    };
-   // 删除文章分类
+   // 删除分类分类
    exports.deleteclassify = async (req, res) => {
     const flag = await Classify.findOneAndDelete({ _id: req.query.id });
     if (!flag) {
@@ -47,7 +51,7 @@ exports.classify = async (req, res) => {
      });
     }
    };
-   // 获取需要修改的文章分类
+   // 获取需要修改的分类分类
    exports.getclassify = async (req, res) => {
     // console.log(req.query);
     const classify = await Classify.findOne({ _id: req.query.id });

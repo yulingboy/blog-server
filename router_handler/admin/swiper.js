@@ -6,20 +6,26 @@ exports.new = async (req, res) => {
     const swiper = await Swiper.create(req.body);
     if (!swiper) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
-        swiper: swiper,
+        meta: {
+          status: 200,
+          message: "success",
+        },
+        data: swiper,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -37,24 +43,31 @@ exports.list = async (req, res) => {
     //页码对应的数据查询开始位置
     let start = (pageNum - 1) * pageSize;
     // 从数据库中查询用户
-    let swipers = await Swiper.find({}).sort({time: -1}).limit(pageSize).skip(start); 
+    let swipers = await Swiper.find({})
+      .sort({ time: -1 })
+      .limit(pageSize)
+      .skip(start);
     res.send({
-      meta:{
+      meta: {
         status: 200,
-        message: "success"
+        message: "success",
       },
-      data:{
-        swipers:swipers, //用户数据
-        pageNum: pageNum,  // 当前页
-        total: total, // 数据总数
-        pageSize: pageSize, // 每页条数
-        pageCount: pageCount, // 页数
-      }
+      data: {
+        swipers: swipers, //用户数据
+        pagition: {
+          pageNum: pageNum, // 当前页
+          total: total, // 数据总数
+          pageSize: pageSize, // 每页条数
+          pageCount: pageCount, // 页数
+        },
+      },
     });
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -64,20 +77,26 @@ exports.info = async (req, res) => {
     const swiper = await Swiper.findOne({ _id: req.params.id });
     if (!swiper) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
-        swiper: swiper,
+        meta: {
+          status: 200,
+          message: "success",
+        },
+        data: swiper,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -91,20 +110,26 @@ exports.edit = async (req, res) => {
     );
     if (!swiper) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
-        swiper: swiper,
+        meta: {
+          status: 200,
+          message: "success",
+        },
+        data: swiper,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -114,42 +139,58 @@ exports.delete = async (req, res) => {
     const swiper = await Swiper.findOneAndDelete({ _id: req.params.id });
     if (!swiper) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
 // 审核轮播图状态
 exports.check = async (req, res) => {
   try {
-    const swiper = await Swiper.findOneAndUpdate({ _id: req.params.id },{ $set: req.body },{ new: true });
+    const swiper = await Swiper.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
     if (!swiper) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
-        data: swiper
+        meta: {
+          status: 200,
+          message: "success",
+        },
+        data: swiper,
       });
     }
   } catch (error) {
-      return res.send({
-          status: 500,
-          message: error
-      })
+    return res.send({
+      meta: {
+        status: 500,
+        message: error,
+      },
+    });
   }
 };

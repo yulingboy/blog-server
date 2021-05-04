@@ -16,8 +16,8 @@ const swiperSchema = new mongoose.Schema({
         type: String
     },
     status: {
-        type: Number,
-        default: 0 // 0未上线 1已上线
+        type: Boolean,
+        default: false // 0未上线 1已上线
     }
 })
 

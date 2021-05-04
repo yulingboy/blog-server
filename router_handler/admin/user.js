@@ -4,6 +4,7 @@ const User = require("../../models/user");
 // 用户信息列表
 exports.list = async (req, res) => {
   try {
+    console.log(req.query);
     // 接收客户端传来的当前页参数
     let pageNum = +req.query.pageNum || 1;
     // 每一页显示的数据条数
@@ -15,7 +16,7 @@ exports.list = async (req, res) => {
     //页码对应的数据查询开始位置
     let start = (pageNum - 1) * pageSize;
     // 从数据库中查询用户
-    let users = await User.find({}).limit(pageSize).skip(start); 
+    let users = await User.find({}).limit(pageSize).skip(start);
     res.send({
       meta:{
         status: 200,
@@ -23,10 +24,12 @@ exports.list = async (req, res) => {
       },
       data:{
         users:users, //用户数据
-        pageNum: pageNum,  // 当前页
-        total: total, // 数据总数
-        pageSize: pageSize, // 每页条数
-        pageCount: pageCount, // 页数
+        pagition:{
+          pageNum: pageNum,  // 当前页
+          total: total, // 数据总数
+          pageSize: pageSize, // 每页条数
+          pageCount: pageCount, // 页数
+        }
       }
     });
   } catch (error) {

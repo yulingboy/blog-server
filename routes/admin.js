@@ -1,6 +1,12 @@
 // 导入express模块
 const express = require('express');
 const router = express.Router();
+const multer = require('multer')
+const path = require("path")
+const uploader = multer({
+  dest: path.join(path.dirname(__dirname),"public","imgs")
+})
+
 // 将路由函数导入
 // const userHandler=require('../router_handler/admin')
 const auth = require('../middleware/auth')
@@ -85,6 +91,7 @@ router.get('/images', image.list) //获取图片列表
 router.delete('/images/:id', image.delete) //删除图片
 router.get('/images/:id', image.info) // 获取需要修改的图片
 router.put('/images/:id', image.edit) // 修改图片
+router.post('/image', uploader.single('file'), image.add) // 修改图片
 
 
 // router.post('/userinfo', userHandler.userinfo) //添加每日一句

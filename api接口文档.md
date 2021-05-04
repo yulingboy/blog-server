@@ -498,7 +498,7 @@ HTTP Status Code 标识状态
 
 #### 1.4.3  更新文章状态
 
-请求路径：users/:id
+请求路径：articles/:id
 
 请求方法：patch
 
@@ -1783,7 +1783,7 @@ HTTP Status Code 标识状态
 
 - 请求路径：swipers/:id
 
-- 请求方法：patch
+- 请求方法： 
 
 - 请求参数
 

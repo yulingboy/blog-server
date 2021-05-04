@@ -1,5 +1,13 @@
 const Imgbed = require("../../models/imgbed");
+const formidable = require("formidable");
 
+const path = require("path")
+const fs = require("fs")
+const multiparty = require("multiparty");
+// const multer = require("multer")
+// const uploader = multer({
+//   dest: path.join(path.dirname(__dirname),"public","imgs")
+// })
 //添加图片
 exports.new = async (req, res) => {
   try {
@@ -7,20 +15,26 @@ exports.new = async (req, res) => {
     const image = await Imgbed.create({ title, img, description });
     if (!image) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
         data: image,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -38,24 +52,31 @@ exports.list = async (req, res) => {
     //页码对应的数据查询开始位置
     let start = (pageNum - 1) * pageSize;
     // 从数据库中查询用户
-    let images = await Imgbed.find({}).sort({time: -1}).limit(pageSize).skip(start); 
+    let images = await Imgbed.find({})
+      .sort({ time: -1 })
+      .limit(pageSize)
+      .skip(start);
     res.send({
-      meta:{
+      meta: {
         status: 200,
-        message: "success"
+        message: "success",
       },
-      data:{
-        images:images, //用户数据
-        pageNum: pageNum,  // 当前页
-        total: total, // 数据总数
-        pageSize: pageSize, // 每页条数
-        pageCount: pageCount, // 页数
-      }
+      data: {
+        images: images, //用户数据
+        pagition: {
+          pageNum: pageNum, // 当前页
+          total: total, // 数据总数
+          pageSize: pageSize, // 每页条数
+          pageCount: pageCount, // 页数
+        },
+      },
     });
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -65,19 +86,25 @@ exports.delete = async (req, res) => {
     const image = await Imgbed.findOneAndDelete({ _id: req.params.id });
     if (!image) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success"
+        meta: {
+          status: 200,
+          message: "success",
+        },
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -87,20 +114,26 @@ exports.info = async (req, res) => {
     const image = await Imgbed.findOne({ _id: req.params.id });
     if (!image) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
         data: image,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
@@ -114,43 +147,95 @@ exports.edit = async (req, res) => {
     );
     if (!image) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
+        meta: {
+          status: 200,
+          message: "success",
+        },
         data: image,
       });
     }
   } catch (error) {
     return res.send({
-      status: 500,
-      message: error,
+      meta: {
+        status: 500,
+        message: error,
+      },
     });
   }
 };
 // 审核图片
 exports.check = async (req, res) => {
   try {
-    const friend = await Imgbed.findOneAndUpdate({ _id: req.params.id },{ $set: req.body },{ new: true });
+    const friend = await Imgbed.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: req.body },
+      { new: true }
+    );
     if (!friend) {
       return res.send({
-        status: 400,
-        message: "fail",
+        meta: {
+          status: 400,
+          message: "fail",
+        },
       });
     } else {
       res.send({
-        status: 200,
-        message: "success",
-        data: friend
+        meta: {
+          status: 200,
+          message: "success",
+        },
+        data: friend,
       });
     }
   } catch (error) {
-      return res.send({
-          status: 500,
-          message: error
-      })
+    return res.send({
+      meta: {
+        status: 500,
+        message: error,
+      },
+    });
   }
 };
+// 上传图片
+exports.add = async (req, res)=>{
+  const file = req.file;
+  console.log(file)
+  console.log(req.body)
+  //获取后缀名
+// const extname = path.extname(file.originalname)
+//获取上传成功之后的文件路径
+const filepath = file.path
+
+const originalname = req.body.imgname
+const destination = file.destination
+const filename = destination + '\\' + originalname
+//上传之后文件的名称
+// const filename = filepath + extname  
+// path.join(path.dirname(filepath)
+ console.log(filename)
+// 重命名，借用fs的rename重命名的方法，第一参数是源文件地址路径，第二个参数是将源文件改名后的地址(和参数一地址相同，只不过名字变了而已，两个参数都是地址)
+fs.rename(filepath,filename, async err =>{
+   if(!err){
+        //  成功以后要做的事情
+        const image = await Imgbed.create({title:originalname, img: filename });
+        console.log(image,"filename")
+        res.send({
+          meta: {
+            status: 200,
+            message: "success",
+          },
+          data: image,
+        })
+    }
+})
+
+
+  
+}
